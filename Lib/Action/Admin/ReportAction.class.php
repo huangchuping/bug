@@ -32,6 +32,7 @@ class ReportAction extends Action {
 		$pid = intval($pid);
 		if($json==1){
 			$get_sort = $this->_get('sort');
+			$get_type = $this->_get('style');
 			$get_order = $this->_get('order');
 			$sort = isset($get_sort) ? strval($get_sort) : 't1_new_priority';   
 			$sort = str_replace('_new_','_old_',$sort); 
@@ -122,19 +123,37 @@ class ReportAction extends Action {
 				'creator' => 't1.creator as creator',
 				'creator2' => 't2.username as creatorname',
 				'addtime' => 't1.addtime as addtime',
+				'style' => 't1.style as style',
 			);
 			$fields = implode(',',$arr_flelds);
 			unset($arr_flelds);
 			
 			if(!$view){
-				$info = $result->table($Report_table.' as t1')->field('SQL_CALC_FOUND_ROWS '.$fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 48')->having($map)->order($sort.' '.$order)->limit($offset,$rows)->select();
+				if($get_type == 'bug'){
+					$info = $result->table($Report_table.' as t1')->field('SQL_CALC_FOUND_ROWS '.$fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 48')->having($map)->order($sort.' '.$order)->limit($offset,$rows)->select();
+				}elseif($get_type == 'remand'){
+					$info = $result->table($Report_table.' as t1')->field('SQL_CALC_FOUND_ROWS '.$fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 49')->having($map)->order($sort.' '.$order)->limit($offset,$rows)->select();
+				}else{
+					$info = $result->table($Report_table.' as t1')->field('SQL_CALC_FOUND_ROWS '.$fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->having($map)->order($sort.' '.$order)->limit($offset,$rows)->select();
+				}
 				$count = $result->query('SELECT FOUND_ROWS() as total');
 				$count = $count[0]['total'];	
 			}else{
-				$info = $result->table($Report_table.' as t1')->field($fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 48')->having($map)->order($sort.' '.$order)->select();
+				if($get_type == 'bug'){
+					$info = $result->table($Report_table.' as t1')->field($fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 48')->having($map)->order($sort.' '.$order)->select();
+				}elseif($get_type == 'remand'){
+					$info = $result->table($Report_table.' as t1')->field($fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->where('style = 49')->having($map)->order($sort.' '.$order)->select();
+				}else{
+					$info = $result->table($Report_table.' as t1')->field($fields)->join(' '.$user.' as t2 on t2.id = t1.creator')->join(' '.$Linkage.' as t3 on t3.id = t1.status')->join(' '.$Linkage.' as t4 on t4.id = t1.level')->join(' '.$Linkage.' as t5 on t5.id = t1.type')->join(' '.$Linkage.' as t6 on t6.id = t1.hertz')->join(' '.$Linkage.' as t7 on t7.id = t1.priority')->join(' '.$user.' as t8 on t8.id = t1.user_id')->join(' '.$Project_table.' as t9 on t9.id = t1.pid')->having($map)->order($sort.' '.$order)->select();
+				}
 				$count = count($info);
 			}
 			//dump($info);exit;
+			foreach($info as $key=>$val){
+				$id = M('Linkage')->where(array('id'=>$val['style']))->select();
+				$info[$key]['style'] = $id[0]['val'];
+			}
+//			exit;
 			$new_info = array();
 			//$items = array();
 			$new_info['total'] = $count;
@@ -165,6 +184,7 @@ class ReportAction extends Action {
 				'id'=>-1,
 				'text'=>'未指派',
 			));
+//			var_dump($type);exit;
 			
 			$this->assign('priority',$priority);
 			$this->assign('status',$status);
@@ -216,10 +236,21 @@ class ReportAction extends Action {
 			$this->assign('pid',$pid);
 			$this->assign('uniqid',uniqid());
 			if($act=='add'){
-				$bugno = $Report->where('style = 48')->Max('id');
-				$bugno = $bugno+1;
-				$bugno = 'E'.str_pad($bugno,9,'0',STR_PAD_LEFT);
+				if($_REQUEST['style'] == 'bug'){
+					$id = M('Linkage')->where(array('code'=>'bug'))->select();
+					$bugno = $Report->where('style = '.$id[0]['id'])->Max('bugno');
+					$bugno = intval(substr($bugno,1));
+					$bugno = $bugno+1;
+					$bugno = 'E'.str_pad($bugno,9,'0',STR_PAD_LEFT);
+				}else{
+					$id = M('Linkage')->where(array('code'=>'xuqiu'))->select();
+					$bugno = $Report->where('style = '.$id[0]['id'])->Max('bugno');
+					$bugno = intval(substr($bugno,2));
+					$bugno = $bugno+1;
+					$bugno = 'RE'.str_pad($bugno,8,'0',STR_PAD_LEFT);
+				}
 				$this->assign('bugno',$bugno);
+				$this->assign('style',$_REQUEST['style']);
 				$this->assign('username',$username);
 				$this->assign('act','add');
 				if($pid){
@@ -234,9 +265,9 @@ class ReportAction extends Action {
 				}else{
 					$map['id'] = array('eq',$id);
 					$info = $Report->relation(array('baseinfo','create'))->where($map)->find();
-					//dump($info);
-					$bugno = 'E'.str_pad($info['id'],8,'0',STR_PAD_LEFT);
-					$this->assign('bugno',$bugno);
+//					dump($info);exit;
+//					$bugno = 'E'.str_pad($info['bugno'],8,'0',STR_PAD_LEFT);
+					$this->assign('bugno',$info['bugno']);
 					$this->assign('id',$id);
 					$this->assign('username',$info['createname']);
 					$this->assign('act','edit');
@@ -275,7 +306,12 @@ class ReportAction extends Action {
 					echo $role; exit;
 				}
 				$data['creator'] = $userid;
-				$data['style'] = 48;
+				if($_REQUEST['style'] == 'bug'){
+					$id = M('Linkage')->where(array('code'=>'bug'))->select();
+				}else{
+					$id = M('Linkage')->where(array('code'=>'xuqiu'))->select();
+				}
+				$data['style'] = $id[0]['id'];
 				$data['addtime'] = $nowtime;
 				$data['uptime'] = $nowtime;
 				$add = $Report->relation(true)->add($data);

@@ -115,10 +115,10 @@ $(function(){
 	});
 });
 
-function onSubmitReport(idd){
+function onSubmitReport(idd,style){
 	$.messager.progress();
 	$("#addFormReport"+idd).form('submit',{
-		url:'__URL__/add/act/add/go/1',
+		url:'__URL__/add/act/add/go/1/style/'+style,
 		onSubmit: function(){
 			var isValid = $(this).form('validate');
 			if (!isValid){
@@ -252,7 +252,7 @@ function onResetReport(idd){
       </tbody>
       <tr>
         <td height="38" colspan="6" align="center"><if condition="$act=='add'">
-        <a href="javascript:void(0);" onclick="javascript:onSubmitReport('{$uniqid}')" id="su" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a><else /><a href="javascript:void(0);" onclick="javascript:return onUploadReport('{$uniqid}')" id="sue" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a></if> &nbsp; <a href="javascript:void(0);" onclick="javascript:onResetReport('{$uniqid}')" id="re" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a></td>
+        <a href="javascript:void(0);" onclick="javascript:onSubmitReport('{$uniqid}','{$style}')" id="su" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a><else /><a href="javascript:void(0);" onclick="javascript:return onUploadReport('{$uniqid}')" id="sue" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a></if> &nbsp; <a href="javascript:void(0);" onclick="javascript:onResetReport('{$uniqid}')" id="re" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a></td>
         </tr>
      </table> 
 </form>
